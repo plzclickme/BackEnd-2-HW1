@@ -19,15 +19,17 @@ async function addNote(title) {
 
 async function removeNotes(id) {
     const notes = await getNotes();
-    const filteredNotes = notes.filter((note) => {
-        return note.id !== id;
-    });
-    console.log("FILTERED", filteredNotes);
-    console.log("notes", notes);
-    //notes.push(filteredNotes);
-
-    await saveNotes(filteredNotes);
-    console.log(chalk.bgGreen("Note was deleted!"));
+    const elemIsExist = notes.find((note) => note.id == id);
+    if (typeof elemIsExist === "object") {
+        const filteredNotes = notes.filter((note) => {
+            return note.id !== id;
+        });
+        notes.push(filteredNotes);
+        await saveNotes(filteredNotes);
+        console.log(chalk.bgGreen("Note was deleted!"));
+    } else {
+        console.log(chalk.bgRedBright("ID is not found!"));
+    }
 }
 
 async function getNotes() {
